@@ -22,6 +22,6 @@ public interface Transformations {
      * convert the actions to incidence matrix
      * @param actions 
      */
-    public void ActionsToMatrix(ArrayList<Action> actions);
+    public void ActionsToMatrix(ArrayList<Sequence> actions);
     
 }

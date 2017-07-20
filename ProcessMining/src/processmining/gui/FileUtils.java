@@ -7,8 +7,10 @@ package processmining.gui;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
 
 /**
  *
@@ -23,17 +25,19 @@ public class FileUtils {
      * @return the content of the file
      */
     public static String readFile(File file) {
-        String sCurrentLine = null;
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-
-            while ((sCurrentLine = br.readLine()) != null) {
-                System.out.println(sCurrentLine);
+        String content = "";
+        try (InputStream in = Files.newInputStream(file.toPath());
+                BufferedReader reader
+                = new BufferedReader(new InputStreamReader(in))) {
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                //System.out.println(line);
+                content = content + line + "\n";
             }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException x) {
+            System.err.println(x);
         }
-        return sCurrentLine;
+        return content;
     }
 
 }

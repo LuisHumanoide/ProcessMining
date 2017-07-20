@@ -20,7 +20,7 @@ public class TransformUtils implements Transformations{
     }
 
     @Override
-    public void ActionsToMatrix(ArrayList<Action> actions) {
+    public void ActionsToMatrix(ArrayList<Sequence> actions) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

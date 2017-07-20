@@ -5,6 +5,8 @@
  */
 package processmining;
 
+import processmining.Graph.Sequence;
+
 /**
  *
  * @author Humanoide
@@ -15,7 +17,7 @@ public class ProcessMining {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        //la clase chida es Gui.java
     }
     
 }

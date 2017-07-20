@@ -7,6 +7,7 @@ package processmining.gui;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import processmining.actions.Process;
 
 /**
  *
@@ -71,14 +72,17 @@ public class Gui extends javax.swing.JFrame {
      * @param evt
      */
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        JFileChooser chooser = new JFileChooser();
+        JFileChooser chooser = new JFileChooser(".");
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
                 "TXT and LOG files", "txt", "log");
         chooser.setFileFilter(filter);
         int returnVal = chooser.showOpenDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            System.out.println(FileUtils.readFile(chooser.getSelectedFile()));
+        String content="";
+        if (returnVal == JFileChooser.APPROVE_OPTION) {        
+            content=FileUtils.readFile(chooser.getSelectedFile());
         }
+        /*get the sequences*/
+        Process.getSequences(content);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
