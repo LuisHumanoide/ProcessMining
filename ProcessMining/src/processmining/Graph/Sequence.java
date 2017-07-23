@@ -7,6 +7,7 @@ package processmining.Graph;
 
 import java.util.HashSet;
 import java.util.LinkedList;
+import processmining.matrix.LabelNames;
 
 /**
  *
@@ -14,7 +15,7 @@ import java.util.LinkedList;
  */
 public class Sequence {
     /*the sequence*/
-    LinkedList<String> sequence;
+    public LinkedList<String> sequence;
     /*registry of the names*/
     HashSet<String> nodeNames;
     /*registry of the label structure*/
@@ -36,12 +37,16 @@ public class Sequence {
         if(nodeNames.add(label)){
             sequence.add(label);
             labels.add(new Label(label));
+            //this name is added to static variable for using in the matrix
+            LabelNames.addLabelNames(label);
         }
         /*if is repeated*/
         else{
             Label lb=findLabel(label);
             lb.setCounter(lb.getCounter()+1);
             sequence.add(label+lb.getCounter());
+            //this name is added to static variable for using in the matrix
+            LabelNames.addLabelNames(label+lb.getCounter());
         }
         
     }

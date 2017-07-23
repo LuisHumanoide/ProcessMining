@@ -5,9 +5,13 @@
  */
 package processmining.gui;
 
+import java.util.LinkedList;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import processmining.Graph.Sequence;
 import processmining.actions.Process;
+import processmining.matrix.LabelNames;
+import processmining.matrix.Matrix;
 
 /**
  *
@@ -82,7 +86,11 @@ public class Gui extends javax.swing.JFrame {
             content=FileUtils.readFile(chooser.getSelectedFile());
         }
         /*get the sequences*/
-        Process.getSequences(content);
+        LinkedList<Sequence> sq=Process.getSequences(content);
+        System.out.println(LabelNames.labelNamesList());
+        Matrix m=new Matrix();
+        m.makeMatrix(sq);
+        m.printMatrix();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
