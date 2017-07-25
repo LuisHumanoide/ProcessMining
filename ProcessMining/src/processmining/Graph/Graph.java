@@ -6,6 +6,7 @@
 package processmining.Graph;
 
 import java.util.HashSet;
+import processmining.gui.FileUtils;
 import processmining.matrix.ArrayMatrix;
 import processmining.matrix.LabelNames;
 import processmining.matrix.MapMatrix;
@@ -88,6 +89,21 @@ public class Graph {
             }
         }
         
+        makeGraphviz("first graph");
+        
+    }
+    /**
+     * generate the graph in graphviz software
+     */
+    public void makeGraphviz(String name){
+        String content="digraph G{\n";
+        for(Vertex v:nodes){
+            for(Vertex v2:v.getChilds()){
+                content=content+"\""+v.getLabel()+"\" -> "+"\""+v2.getLabel()+"\"\n";
+            }
+        }
+        content=content+"}";
+        FileUtils.write(name, content);
     }
     
     public Graph(MapMatrix mm){
