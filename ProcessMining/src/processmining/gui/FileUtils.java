@@ -69,5 +69,21 @@ public class FileUtils {
             }
         }
     }
+    
+    
+     /**
+     * generate the image file to graphviz
+     * @param fileName
+     * @param format 
+     */
+    public static void generateImg(String fileName, String format) {
+        try {
+            String cmd = "bin\\dot.exe" + " -T" + format + " " +  fileName + ".txt "
+                    + "-o " + fileName + "." + format;
+            Runtime.getRuntime().exec(cmd);
+        } catch (IOException ioe) {
+            System.out.println(ioe);
+        }
+    }
 
 }

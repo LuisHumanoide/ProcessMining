@@ -7,6 +7,7 @@ package processmining.Graph;
 
 import java.util.HashSet;
 import processmining.gui.FileUtils;
+import processmining.gui.GraphFrame;
 import processmining.matrix.ArrayMatrix;
 import processmining.matrix.LabelNames;
 import processmining.matrix.MapMatrix;
@@ -20,6 +21,7 @@ public class Graph {
 
     HashSet<Vertex> nodes;
     HashSet<Vertex> startNodes;
+    //No estoy usando edges
 
     /*==========================================================
     GETTERS AND SETTERS
@@ -88,9 +90,7 @@ public class Graph {
                 }
             }
         }
-        
-        makeGraphviz("first graph");
-        
+                
     }
     /**
      * generate the graph in graphviz software
@@ -104,12 +104,18 @@ public class Graph {
         }
         content=content+"}";
         FileUtils.write(name, content);
+        FileUtils.generateImg(name, "png");
+        new GraphFrame(name);   
     }
     
     public Graph(MapMatrix mm){
-        
+        //code here
     }
-    
+    /**
+     * find a vertex by the giving label
+     * @param label
+     * @return 
+     */
     public Vertex findByLabel(String label){
         for(Vertex v:nodes){
             if(v.getLabel().equals(label)){

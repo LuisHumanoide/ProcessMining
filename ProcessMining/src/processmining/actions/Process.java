@@ -18,8 +18,13 @@ import processmining.matrix.MapMatrix;
  * @author Humanoide
  */
 public class Process {
-
+    /**
+     * extract the sequences by the file
+     * @param logFile
+     * @return 
+     */
     public static LinkedList<Sequence> getSequences(String logFile) {
+        LabelNames.clearList();
         /*the log file is splitted, and each division represent a sequence*/
         String[] arraySequence = logFile.split("\n");        
         /*the list of sequences is initialized*/
@@ -52,7 +57,8 @@ public class Process {
         m.makeMatrix(sq);
         m.printMatrix();
         ArrayMatrix am=new ArrayMatrix(m.Rows);
-        Graph graph=new Graph(am);
+        Graph graph1=new Graph(am);
+        graph1.makeGraphviz("grafo1");
     }
 
 }

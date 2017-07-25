@@ -30,5 +30,9 @@ public class LabelNames {
         return labelNamesList().get(index);
     }
     
+    public static void clearList(){
+        labelNames.clear();
+    }
+    
     
 }
