@@ -26,5 +26,9 @@ public class LabelNames {
         return list;
     }
     
+    public static String get(int index){
+        return labelNamesList().get(index);
+    }
+    
     
 }

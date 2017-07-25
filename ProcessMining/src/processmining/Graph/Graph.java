@@ -6,6 +6,9 @@
 package processmining.Graph;
 
 import java.util.HashSet;
+import processmining.matrix.ArrayMatrix;
+import processmining.matrix.LabelNames;
+import processmining.matrix.MapMatrix;
 
 /**
  * class that represent the graph
@@ -62,15 +65,38 @@ public class Graph {
     public Graph() {
         nodes=new HashSet<>();
         startNodes=new HashSet<>();
+        
     }
     /**
      * search the vertex by the giving label in the graph
      * @param label
      * @return 
      */
+    public Graph(ArrayMatrix am){
+        this();
+        for(String name:LabelNames.labelNamesList()){
+            nodes.add(new Vertex(name));
+        }
+        for(int i=0;i<am.size();i++){
+            Vertex vtx=this.findByLabel(LabelNames.get(i));
+            
+            for(int j=0;j<am.size();j++){
+                if(am.binaryMatrix[i][j]==1){
+                    Vertex vtx2=this.findByLabel(LabelNames.get(j));
+                    vtx.addChild(vtx2);
+                }
+            }
+        }
+        
+    }
+    
+    public Graph(MapMatrix mm){
+        
+    }
+    
     public Vertex findByLabel(String label){
         for(Vertex v:nodes){
-            if(v.equals(label)){
+            if(v.getLabel().equals(label)){
                 return v;
             }
         }

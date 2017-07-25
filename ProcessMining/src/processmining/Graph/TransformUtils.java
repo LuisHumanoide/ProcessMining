@@ -5,7 +5,7 @@
  */
 package processmining.Graph;
 
-import processmining.matrix.Matrix;
+import processmining.matrix.MapMatrix;
 import java.util.ArrayList;
 
 /**
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class TransformUtils implements Transformations{
 
     @Override
-    public Vertex MatrixToGraph(Matrix m) {
+    public Vertex MatrixToGraph(MapMatrix m) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -6,7 +6,12 @@
 package processmining.actions;
 
 import java.util.LinkedList;
+import processmining.Config;
+import processmining.Graph.Graph;
 import processmining.Graph.Sequence;
+import processmining.matrix.ArrayMatrix;
+import processmining.matrix.LabelNames;
+import processmining.matrix.MapMatrix;
 
 /**
  *
@@ -34,4 +39,20 @@ public class Process {
         }
         return sequenceList;
     }
+    /**
+     * do the process receiving the string of the sequences
+     * @param content 
+     */
+    public static void doProcess(String content){
+        //create the sequences
+        LinkedList<Sequence> sq=Process.getSequences(content);
+        //print the sequences
+        if (Config.canPrint) System.out.println(LabelNames.labelNamesList());
+        MapMatrix m=new MapMatrix();
+        m.makeMatrix(sq);
+        m.printMatrix();
+        ArrayMatrix am=new ArrayMatrix(m.Rows);
+        Graph graph=new Graph(am);
+    }
+
 }

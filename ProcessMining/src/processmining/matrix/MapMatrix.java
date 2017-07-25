@@ -7,6 +7,7 @@ package processmining.matrix;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import processmining.Config;
 import processmining.Graph.Sequence;
 
 /**
@@ -14,51 +15,72 @@ import processmining.Graph.Sequence;
  *
  * @author Humanoide
  */
-public class Matrix {
+public class MapMatrix {
 
-    HashMap<String, TokenNames> Rows;
-    Token[][] tokenMatrix;
+    /*array of rows, for example, first we acces to the column and after to the cell*/
+    public HashMap<String, TokenNames> Rows;
+
+    /*binary matrix*/
     int[][] intMatrix;
 
-    public Matrix() {
-        Rows=new HashMap<>();
+    public MapMatrix() {
+        Rows = new HashMap<>();
     }
 
+    /**
+     * construct the initial matrix by the sequences
+     *
+     * @param sequences
+     */
     public void makeMatrix(LinkedList<Sequence> sequences) {
-
+        /*
+        initialize the matrix putting 0 in all cells
+         */
         for (int i = 0; i < LabelNames.labelNamesList().size(); i++) {
             TokenNames tn = new TokenNames();
             Rows.put(LabelNames.labelNamesList().get(i), tn);
         }
-
-        for(Sequence sq:sequences){
-            /*
-            for(int i=0;i<sq.sequence.size()-1;i++){
-                
-            }*/
+        /*
+        make the matrix by the sequence
+         */
+        for (Sequence sq : sequences) {
+            for (int i = 0; i < sq.sequence.size() - 1; i++) {
+                TokenNames tn = Rows.get(sq.sequence.get(i));
+                tn.addOccurrence(sq.sequence.get(i + 1));
+            }
         }
 
     }
 
+    /**
+     * print the map matrix
+     */
     public void printMatrix() {
-        String mm = "";
-        
-        for (int i = 0; i < LabelNames.labelNamesList().size(); i++) {
-            
-            TokenNames tn = Rows.get(LabelNames.labelNamesList().get(i));
-            mm = mm+LabelNames.labelNamesList().get(i) + "\t";
-            
-            for (int j = 0; j < LabelNames.labelNamesList().size(); j++) {
-                mm=mm+"["+LabelNames.labelNamesList().get(j)+","+tn.TokenMap.get(LabelNames.labelNamesList().get(j))+"]"+" ";
+        if (Config.canPrint) {
+            String mm = "";
+
+            for (int i = 0; i < LabelNames.labelNamesList().size(); i++) {
+
+                TokenNames tn = Rows.get(LabelNames.labelNamesList().get(i));
+                mm = mm + LabelNames.labelNamesList().get(i) + "\t";
+
+                for (int j = 0; j < LabelNames.labelNamesList().size(); j++) {
+                    mm = mm + "[" + LabelNames.labelNamesList().get(j) + "," + tn.TokenMap.get(LabelNames.labelNamesList().get(j)) + "]" + " ";
+                }
+                mm = mm + "\n";
             }
-            mm=mm+"\n";
+
+            System.out.println(mm);
         }
-        
-        System.out.println(mm);
     }
 
 }
 
+/**
+ * this class represent one row
+ *
+ * @author Humanoide
+ */
 class TokenNames {
 
     HashMap<String, Integer> TokenMap;
@@ -70,34 +92,7 @@ class TokenNames {
         }
     }
 
-    public void setCell(String name) {
-
-    }
-}
-
-class Token {
-
-    String name;
-    int occurrences;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getOccurrences() {
-        return occurrences;
-    }
-
-    public void setOccurrences(int occurrences) {
-        this.occurrences = occurrences;
-    }
-
-    public Token(String name, int occurrences) {
-        this.name = name;
-        this.occurrences = occurrences;
+    public void addOccurrence(String name) {
+        TokenMap.replace(name, TokenMap.get(name) + 1);
     }
 }

@@ -5,7 +5,7 @@
  */
 package processmining.Graph;
 
-import processmining.matrix.Matrix;
+import processmining.matrix.MapMatrix;
 import java.util.ArrayList;
 
 /**
@@ -17,7 +17,7 @@ public interface Transformations {
      * convert the incidence matrix to a graph
      * @return 
      */
-    public Vertex MatrixToGraph(Matrix m);
+    public Vertex MatrixToGraph (MapMatrix m);
     /**
      * convert the actions to incidence matrix
      * @param actions 

@@ -7,6 +7,7 @@ package processmining.Graph;
 
 import java.util.HashSet;
 import java.util.LinkedList;
+import processmining.Config;
 import processmining.matrix.LabelNames;
 
 /**
@@ -61,6 +62,7 @@ public class Sequence {
     }
     /*print the sequence*/
     public void printSequence(){
+        if (Config.canPrint)
         for(String s:sequence){
             System.out.print(s+" ");
         }
