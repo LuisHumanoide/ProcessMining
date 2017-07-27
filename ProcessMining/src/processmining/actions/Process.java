@@ -167,6 +167,8 @@ public class Process {
         Vertex vD = new Vertex("D" );
         Vertex vE = new Vertex("E" );
         
+        
+        
         vA.AddDescendant(vB);
         vA.AddDescendant(vC);
         vA.AddDescendant(vD);
@@ -186,12 +188,20 @@ public class Process {
         hsTestNodes.add(vC);
         hsTestNodes.add(vD);
         hsTestNodes.add(vE);
-        
-        
+        /**
+         * for test purpuses, clean the labelnames and add the names again
+         */
+        /*
+        LabelNames.clearList();
+        for(Vertex v:hsTestNodes){
+            LabelNames.addLabelNames(v.getLabel());
+        }
+        */
         Graph pGraph = new Graph(hsTestNodes);
         System.out.println("Testing transitive reduction.");
         TransitiveReduction(pGraph);
-        
+        //this method works with descendants
+        //pGraph.makeGraphviz2("asdf");
         System.out.println("Exit of TestTransitiveReduction function.");
     }
     

@@ -90,6 +90,18 @@ public class Graph {
                 }
             }
         }
+        /*
+        for(int i=0;i<am.size();i++){
+            Vertex vtx=this.findByLabel(LabelNames.get(i));
+            
+            for(int j=0;j<am.size();j++){
+                if(am.binaryMatrix[i][j]==1){
+                    Vertex vtx2=this.findByLabel(LabelNames.get(j));
+                    vtx.AddDescendant(vtx2);
+                }
+            }
+        }
+        */
                 
     }
     /**
@@ -99,6 +111,19 @@ public class Graph {
         String content="digraph G{\n";
         for(Vertex v:nodes){
             for(Vertex v2:v.getChilds()){
+                content=content+"\""+v.getLabel()+"\" -> "+"\""+v2.getLabel()+"\"\n";
+            }
+        }
+        content=content+"}";
+        FileUtils.write(name, content);
+        FileUtils.generateImg(name, "png");
+        new GraphFrame(name);   
+    }
+    
+       public void makeGraphviz2(String name){
+        String content="digraph G{\n";
+        for(Vertex v:nodes){
+            for(Vertex v2:v.getDescendants().values()){
                 content=content+"\""+v.getLabel()+"\" -> "+"\""+v2.getLabel()+"\"\n";
             }
         }

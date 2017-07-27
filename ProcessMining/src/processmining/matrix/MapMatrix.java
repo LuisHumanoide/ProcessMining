@@ -8,7 +8,9 @@ package processmining.matrix;
 import java.util.HashMap;
 import java.util.LinkedList;
 import processmining.Config;
+import processmining.Graph.Graph;
 import processmining.Graph.Sequence;
+import processmining.Graph.Vertex;
 
 /**
  * class that represent the incidence matrix
@@ -50,6 +52,38 @@ public class MapMatrix {
             }
         }
 
+    }
+    /**
+     * create a mapMatrix by a graph 
+     * @param graph 
+     */
+    public HashMap<String, TokenNames> makeMatrix(Graph graph){
+         /*
+        initialize the matrix putting 0 in all cells
+         */
+        for (int i = 0; i < LabelNames.labelNamesList().size(); i++) {
+            TokenNames tn = new TokenNames();
+            Rows.put(LabelNames.labelNamesList().get(i), tn);
+        }
+        /*
+         * for each node and each child of the node, the matrix will be formed
+         */
+        /*
+        for(Vertex v:graph.getNodes()){
+            TokenNames tn=Rows.get(v.getLabel());
+            for(Vertex childs:v.getDescendants().values()){
+                tn.addOccurrence(childs.getLabel());
+            }
+        }*/
+        
+        for(Vertex v:graph.getNodes()){
+            TokenNames tn=Rows.get(v.getLabel());
+            for(Vertex childs:v.getChilds()){
+                tn.addOccurrence(childs.getLabel());
+            }
+        }
+        printMatrix();
+        return Rows;
     }
 
     /**

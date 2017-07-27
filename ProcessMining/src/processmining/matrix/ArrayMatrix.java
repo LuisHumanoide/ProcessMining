@@ -7,6 +7,7 @@ package processmining.matrix;
 
 import java.util.HashMap;
 import processmining.Config;
+import processmining.Graph.Graph;
 
 /**
  * the matrix is in form of array 2D
@@ -32,13 +33,7 @@ public class ArrayMatrix {
         int size=LabelNames.labelNamesList().size();
         intMatrix=new int[size][size];
         binaryMatrix=new int[size][size];
-        /*
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                intMatrix[i][j]=0;
-                binaryMatrix[i][j]=0;
-            }
-        }*/
+
     }
     /**
      * create matrix by the hash map generated in the mapMatrix
@@ -57,6 +52,13 @@ public class ArrayMatrix {
                 }
             }
         }
+    }
+    /**
+     * create a new matrix by the graph
+     * @param graph 
+     */
+    public ArrayMatrix(Graph graph){
+        this(new MapMatrix().makeMatrix(graph));      
     }
     
     public int size(){
