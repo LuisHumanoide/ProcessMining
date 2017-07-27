@@ -53,6 +53,21 @@ public class ArrayMatrix {
             }
         }
     }
+    
+    public ArrayMatrix Transpose()
+    {
+        ArrayMatrix pTransposed = new ArrayMatrix();
+        for (int i = 0; i < LabelNames.labelNamesList().size(); i++) 
+        {
+            for (int j = 0; i < LabelNames.labelNamesList().size(); i++) 
+            {
+                pTransposed.binaryMatrix[j][i] = binaryMatrix[i][j]; 
+            }
+        }
+        return pTransposed;
+    }
+    
+    
     /**
      * create a new matrix by the graph
      * @param graph 

@@ -315,13 +315,31 @@ public class Process {
         
         //To this point, the process seems to be ok.
         //Now: 2) Reverse directions of all arcs to obtain the transpose graph.
+        ArrayMatrix tempMatrix = new ArrayMatrix( in_pGraph);
         
+        ArrayMatrix tempTransposed = tempMatrix.Transpose();
         
+        Graph pTransposedGraph = new Graph(tempTransposed);
+        Stack<Vertex> sTransposedStack = new Stack<>();
         
-        //This is pretty much the Same as part 1, but with the TRANSPOSED Graph.
-        while ( sDFSStack.empty() == false )
+        LinkedList<Vertex> pPreStack = new LinkedList<>();
+        
+        for( Vertex V : sDFSStack)
         {
-            Vertex V = sDFSStack.pop();
+            pPreStack.addFirst(sDFSStack.pop());
+        }
+        
+        //Finally, we iterate the list to put the ones from the transposed graph into the STACK.
+        for(Vertex V : pPreStack)
+        {
+            sTransposedStack.push( pTransposedGraph.findByLabel(V.getLabel()) ); // get the ones with the same label, but that have inverted edges.
+        }
+        
+        //Now, part 3)
+        //This is pretty much the Same as part 1, but with the TRANSPOSED Graph.
+        while ( sTransposedStack.empty() == false )
+        {
+            Vertex V = sTransposedStack.pop();
             if(V.isVisited())
             {
                 //Then, it is not necessary
