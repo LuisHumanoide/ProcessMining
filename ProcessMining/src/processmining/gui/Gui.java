@@ -166,6 +166,8 @@ public class Gui extends javax.swing.JFrame {
         }
         //</editor-fold>
 
+        Process.TestTransitiveReduction();
+        Process.TestStronglyConnected();
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
