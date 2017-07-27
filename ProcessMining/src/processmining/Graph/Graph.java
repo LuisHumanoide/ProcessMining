@@ -151,7 +151,41 @@ public class Graph {
     }
     
     
-    
+    /**
+     * 
+     * @param in_Sequence
+     * @return
+     */
+    public Graph getInducedSubgraph (Sequence in_Sequence)
+    {
+        //WARNING: THE NODES OF THE SUBGRAPH MUST BE DIFFERENT INSTANCES THAN THE ONES IN THE ORIGINAL GRAPH, OTHERWISE, WEIRD THINGS MAY HAPPEN.
+        HashSet<Vertex> pNodes = new HashSet<>(); //HashSet to store the nodes which DO belong to this sequence.
+        for (Vertex V :  nodes)
+        {
+            if(in_Sequence.findLabel(V.getLabel()) != null)
+            {
+                pNodes.add(V);
+            }
+        }
+        //Once we have the ones that are on the sequence, we remove the edges to the nodes that are not in it.
+        for( Vertex V : pNodes  )
+        {
+            for(Vertex V2 : V.getDescendants().values())
+            {
+                if( pNodes.contains(V2) == false)
+                {
+                    //Then, this edge is not valid anymore.
+                    V.getDescendants().remove(V2.getLabel());
+                }
+            }
+        }
+        
+        //Finally, assign the nodes to the Graph instance to be return.
+         Graph pInduced = new Graph(pNodes);
+        
+        return pInduced;
+        
+    }
     
 
 }

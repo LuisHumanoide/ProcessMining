@@ -252,10 +252,10 @@ public class Process {
      * @param in_pGraph the graph in which you want to find SCCs.
      * @return a container with all the SCCs in the form of
      */
-    public static ArrayList<ArrayList<Vertex>> GetStronglyConnectedComponents( Graph in_pGraph )
+    public static ArrayList<HashSet<Vertex>> GetStronglyConnectedComponents( Graph in_pGraph )
     {
         //Each arraylist of vertices represents a SCC, so the bigger arraylist has ALL the SCCs of the graph
-        ArrayList<ArrayList<Vertex>> pComponents = new ArrayList<>(  );
+        ArrayList<HashSet<Vertex>> pComponents = new ArrayList<>(  );
         Stack<Vertex> sDFSStack = new Stack<>();
         
         //This for is to ensure that all nodes get analyzed, even if the graph is disconnected.
@@ -318,6 +318,64 @@ public class Process {
         
         
         
+        //This is pretty much the Same as part 1, but with the TRANSPOSED Graph.
+        while ( sDFSStack.empty() == false )
+        {
+            Vertex V = sDFSStack.pop();
+            if(V.isVisited())
+            {
+                //Then, it is not necessary
+                continue;
+            }
+            //else, it means this one has not been pushed onto the stack, so we start a DFS recursive from it.
+            V.setVisited(true);//set it visited so it doesn't cycle.
+            HashSet<Vertex> pNewSCC = new HashSet<>(); //This will store this new SCC of the graph.//It is a Hashset to avoid duplication.
+            Vertex VActual = V;
+            while(true)
+            {
+                pNewSCC.add(VActual); //Add the actual node to this SCC. //Be careful to avoid vertex duplication, therefore the HashSet
+                //First, check all its adjacent vertices, and apply DFS recursively on them.
+                int iCounter = 0;
+                for(Vertex AdjV : VActual.getDescendants().values())
+                {
+                    if(AdjV.isVisited() == false)
+                    {
+                        //Then, call DFS from that node.
+                        AdjV.setVisited(true); //now it counts as being visited, so it is not processed again.
+                        AdjV.setParent( VActual);
+                        VActual = AdjV; //Now the actual is equal to that adjacent vertex. the DFS will now continue from it.
+                        iCounter = -1; //set it to an invalid value, so it doesn't cause trouble.
+                        break;
+                    }
+                    iCounter++;
+                }
+                //if the number of 
+                if(iCounter == VActual.getDescendants().size())
+                {
+                    //No need to push anything into stacks anymore.
+                    //Then, restablish the VActual as the parent of the one who has been just pushed onto the stack.
+                    if( VActual.getParent() != null ) //if it has a Parent, means that the DFS has not yet finished.
+                    {
+                        VActual = VActual.getParent(); // return to the DFS of the parent.
+                    }
+                    else // if it enters here, it means that this vertex is the Root of one of the DFSs (Strongly connected components).
+                    {
+                        System.out.println("One of the SCCs is formed by the Vertices: ");
+                        for(Vertex VNode : pNewSCC)
+                        {
+                            System.out.print(VNode.getLabel() + " ");
+                        }
+                        System.out.println(" ");
+                        pComponents.add(pNewSCC); //Add the component to the arraylist of SCCs.
+                        break; //Break the while (true). So we can continue with any other node missing ( in case of disconnected graphs.) 
+                    }
+                    
+                }
+            }
+        }
+        
+        System.out.println(" Exit the GetStronglyConnectedComponents function. The number of SCCs found is: " + pComponents.size());
+        //Finally, all SCCs have been found.
         return pComponents;
     }
     
@@ -346,6 +404,21 @@ public class Process {
         /*5. For each strongly connected component of G', remove from E' all edges between
         vertices in the same strongly connected component.*/
         //Make a function to find strongly connected components.
+        ArrayList<HashSet<Vertex> > pComponents = GetStronglyConnectedComponents(in_DependencyGraph);
+        //Here, we remove such edges, so we erase the SCCs.
+        for( HashSet<Vertex> hs : pComponents )
+        {
+            for(Vertex V : hs)
+            {
+                for(Vertex V2 : V.getDescendants().values())
+                {
+                    if(hs.contains(V2))
+                    {
+                        V.getDescendants().remove(V2.getLabel()); // remove it from its descendants.
+                    }
+                }
+            }
+        }
         
         /*6. For each process execution present in the log: 
         
@@ -353,6 +426,11 @@ public class Process {
             B) Compute the transitive reduction of the subgraph.
             C) Mark those edges in E' that are present in the transitive reduction.
         */
+        for( Sequence sq : in_lsInputSequences )
+        {
+            //Call the Graph class's function to get the induced subgraph for the given sequence.
+            
+        }
         
         /*7. Remove the unmarked edges in E' */
         
