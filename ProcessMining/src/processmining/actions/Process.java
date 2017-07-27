@@ -72,8 +72,8 @@ public class Process {
 
     /**
      * Function for TESTING ONLY, it reproduces the example given in slides 21 to 23 in the Power point presentation-
-     * it is correctly right now 27 july 2017
-     * @param in_Graph 
+     * it is correctly right now 27 July 2017
+     * @param in_Graph the graph to reduce.
      */
     public static void TransitiveReduction(Graph in_Graph)
     {
@@ -302,6 +302,11 @@ public class Process {
         {
             System.out.print( V.getLabel() + ", " );
         }
+        
+        //To this point, the process seems to be ok.
+        //Now: 2) Reverse directions of all arcs to obtain the transpose graph.
+        
+        
         
         return pComponents;
     }
