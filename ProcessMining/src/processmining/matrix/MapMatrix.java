@@ -48,7 +48,7 @@ public class MapMatrix {
         for (Sequence sq : sequences) {
             for (int i = 0; i < sq.sequence.size() - 1; i++) {
                 TokenNames tn = Rows.get(sq.sequence.get(i));
-                tn.addOccurrence(sq.sequence.get(i + 1));
+                tn.addOccurrence(sq.sequence.get(i + 1));//This is where you fill the matrix INCLUDING the V' vertices.
             }
         }
 

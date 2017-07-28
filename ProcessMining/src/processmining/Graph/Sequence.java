@@ -47,7 +47,7 @@ public class Sequence {
             lb.setCounter(lb.getCounter()+1);
             sequence.add(label+lb.getCounter());
             //this name is added to static variable for using in the matrix
-            LabelNames.addLabelNames(label+lb.getCounter());
+            LabelNames.addLabelNames(label+lb.getCounter());//This is were the "V'" are generated. A gives rise to A', and so on.
         }
         
     }
