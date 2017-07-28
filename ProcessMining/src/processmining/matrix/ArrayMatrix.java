@@ -30,7 +30,8 @@ public class ArrayMatrix {
         /*
         initialize the matrix putting 0 in all cells
          */
-        int size=LabelNames.labelNamesList().size();
+        size=LabelNames.labelNamesList().size(); //PARRA! YOU HAD A HEAVY MISTAKE HERE, TOOK ME A WHILE TO FIND OUT.
+        //you had "int size", but the size should be the one of the class.
         intMatrix=new int[size][size];
         binaryMatrix=new int[size][size];
 
@@ -59,9 +60,9 @@ public class ArrayMatrix {
         ArrayMatrix pTransposed = new ArrayMatrix();
         for (int i = 0; i < LabelNames.labelNamesList().size(); i++) 
         {
-            for (int j = 0; i < LabelNames.labelNamesList().size(); i++) 
+            for (int j = 0; j < LabelNames.labelNamesList().size(); j++) 
             {
-                pTransposed.binaryMatrix[j][i] = binaryMatrix[i][j]; 
+                pTransposed.binaryMatrix[i][j] = binaryMatrix[j][i]; 
             }
         }
         return pTransposed;

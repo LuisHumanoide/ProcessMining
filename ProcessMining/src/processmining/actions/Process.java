@@ -37,7 +37,7 @@ public class Process {
         /*the log file is splitted, and each division represent a sequence*/
         String[] arraySequence = logFile.split("\n");        
         /*the list of sequences is initialized*/
-        LinkedList<Sequence> sequenceList = new LinkedList<Sequence>();
+        LinkedList<Sequence> sequenceList = new LinkedList<>();
 
         /*for each line in the log, the sequence is proceced*/
         for (String sequence : arraySequence) {
@@ -191,12 +191,12 @@ public class Process {
         /**
          * for test purpuses, clean the labelnames and add the names again
          */
-        /*
+        
         LabelNames.clearList();
         for(Vertex v:hsTestNodes){
             LabelNames.addLabelNames(v.getLabel());
         }
-        */
+        
         Graph pGraph = new Graph(hsTestNodes);
         System.out.println("Testing transitive reduction.");
         TransitiveReduction(pGraph);
@@ -236,6 +236,16 @@ public class Process {
         hsTestNodes.add(v2);
         hsTestNodes.add(v3);
         hsTestNodes.add(v4);
+        
+        
+        /**
+         * for test purpuses, clean the labelnames and add the names again
+         */
+        
+        LabelNames.clearList();
+        for(Vertex v:hsTestNodes){
+            LabelNames.addLabelNames(v.getLabel());
+        }
         
         
         Graph pGraph = new Graph(hsTestNodes);
@@ -324,16 +334,22 @@ public class Process {
         
         LinkedList<Vertex> pPreStack = new LinkedList<>();
         
-        for( Vertex V : sDFSStack)
+        while(  sDFSStack.empty() == false)
         {
-            pPreStack.addFirst(sDFSStack.pop());
+            Vertex V = sDFSStack.pop();
+            pPreStack.addFirst(V);
         }
         
+        
+        System.out.println("The order of the stack before starting the Second DFS for SCCs, is: ");
         //Finally, we iterate the list to put the ones from the transposed graph into the STACK.
         for(Vertex V : pPreStack)
         {
             sTransposedStack.push( pTransposedGraph.findByLabel(V.getLabel()) ); // get the ones with the same label, but that have inverted edges.
+            System.out.print(sTransposedStack.peek().getLabel() + " ");
         }
+        
+        
         
         //Now, part 3)
         //This is pretty much the Same as part 1, but with the TRANSPOSED Graph.

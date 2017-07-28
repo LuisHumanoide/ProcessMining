@@ -78,8 +78,8 @@ public class MapMatrix {
         
         for(Vertex v:graph.getNodes()){
             TokenNames tn=Rows.get(v.getLabel());
-            for(Vertex childs:v.getChilds()){
-                tn.addOccurrence(childs.getLabel());
+            for(Vertex VDes:v.getDescendants().values()){
+                tn.addOccurrence(VDes.getLabel());
             }
         }
         printMatrix();

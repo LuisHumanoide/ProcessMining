@@ -86,7 +86,7 @@ public class Graph {
             for(int j=0;j<am.size();j++){
                 if(am.binaryMatrix[i][j]==1){
                     Vertex vtx2=this.findByLabel(LabelNames.get(j));
-                    vtx.addChild(vtx2);
+                    vtx.AddDescendant(vtx2);
                 }
             }
         }
@@ -110,7 +110,7 @@ public class Graph {
     public void makeGraphviz(String name){
         String content="digraph G{\n";
         for(Vertex v:nodes){
-            for(Vertex v2:v.getChilds()){
+            for(Vertex v2:v.getDescendants().values()){
                 content=content+"\""+v.getLabel()+"\" -> "+"\""+v2.getLabel()+"\"\n";
             }
         }

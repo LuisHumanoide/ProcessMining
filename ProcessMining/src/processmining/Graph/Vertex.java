@@ -16,7 +16,7 @@ public class Vertex {
     /*the name of the vertex*/
     private String label;
     /*childs*/
-    private ArrayList<Vertex> childs;
+    //private ArrayList<Vertex> childs;
     
     private Vertex m_Parent ; //This one is used in the DFS Search. It points to the vertex which first visited this one during DFS.
     private boolean m_bVisited; //used to speed up the DFS process.
@@ -46,9 +46,9 @@ public class Vertex {
         this.label = label;
     }
     
-    public ArrayList<Vertex> getChilds() {
+    /*public ArrayList<Vertex> getChilds() {
         return childs;
-    }
+    }*/
     
     public HashMap<String, Vertex> getSuccessors()
     {
@@ -60,9 +60,9 @@ public class Vertex {
         return m_hmDescendants;
     }
     
-    public void setChilds(ArrayList<Vertex> childs) {
+    /*public void setChilds(ArrayList<Vertex> childs) {
         this.childs = childs;
-    }
+    }*/
     
     public void setSuccessors( HashMap<String, Vertex> in_hmSuccessors )
     {
@@ -92,7 +92,7 @@ public class Vertex {
     public Vertex(String label) {
         this.label = label;
         /*initialize the array list*/
-        childs=new ArrayList<>();
+        //childs=new ArrayList<>();
         m_hmSuccessors = new HashMap<String, Vertex>();
         m_hmDescendants = new HashMap<String, Vertex>();
         m_Parent = null;
@@ -105,7 +105,7 @@ public class Vertex {
      */
     public Vertex(String label, ArrayList<Vertex> childs) {
         this.label = label;
-        this.childs = childs;
+        //this.childs = childs;
         m_hmSuccessors = new HashMap<String, Vertex>();
         m_hmDescendants = new HashMap<String, Vertex>();
         m_Parent = null;
@@ -115,18 +115,18 @@ public class Vertex {
      * add a child with the vertex
      * @param v 
      */
-    public void addChild(Vertex v){
+    /*public void addChild(Vertex v){
         childs.add(v);
-    }
+    }*/
     
     /**
      * add a child by giving the label name of the vertex
      * @param graph is the graph where the vertex is
      * @param label the name of the vertex
      */
-    public void addChild(Graph graph, String label){
+    /*public void addChild(Graph graph, String label){
         childs.add(graph.findByLabel(label));
-    }
+    }*/
     
     public void AddSuccessor(Vertex in_vSucc)
     {
