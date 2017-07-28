@@ -73,9 +73,10 @@ public class Process {
     /**
      * Function for TESTING ONLY, it reproduces the example given in slides 21 to 23 in the Power point presentation-
      * it is correctly right now 27 July 2017
+     * The result is returned in the same Graph "in_Graph"
      * @param in_Graph the graph to reduce.
      */
-    public static void TransitiveReduction(Graph in_Graph)
+    public static void TransitiveReduction(Graph in_out_Graph)
     {
         //1. Find a topological ordering of G
         //The selected topological order will be alphabetically. this
@@ -91,7 +92,7 @@ public class Process {
                 c) Add the remanining successors of v to its descendants.
         */
         ArrayList<Vertex> lsInverseTopologicalOrder;
-        lsInverseTopologicalOrder = new ArrayList<Vertex>( in_Graph.getNodes() );
+        lsInverseTopologicalOrder = new ArrayList<Vertex>( in_out_Graph.getNodes() );
         lsInverseTopologicalOrder.sort(Comparator.comparing(Vertex::getLabel).reversed()); //This gives us the array of vertices in the inverted order.
         
         //This has to be done in a separate cycle, otherwise, the successors weren't set correctly.
@@ -148,7 +149,7 @@ public class Process {
         } 
         
         //4. Return the graph (V, {(v, u)| u belongs to succ(v)}).
-        in_Graph.setNodes(hsGraphVertices); //the result remains stored at "in_Graph".
+        in_out_Graph.setNodes(hsGraphVertices); //the result remains stored at "in_Graph".
     }
     
       /**
@@ -259,6 +260,7 @@ public class Process {
     /**
      * Calculates the Strongly connected components of a graph. It is based on the KOSARAJU's algorithm. 
      * but has been adapted to be Iterative, not recursive (so it has no problem with larger graphs).
+     * THIS IS SO LONG BECAUSE IT IS ITERATIVE, the recursive version was so easy :'(
      * @param in_pGraph the graph in which you want to find SCCs.
      * @return a container with all the SCCs in the form of
      */
@@ -460,18 +462,34 @@ public class Process {
             B) Compute the transitive reduction of the subgraph.
             C) Mark those edges in E' that are present in the transitive reduction.
         */
+        ArrayMatrix amEmpty = new ArrayMatrix(); //An array matrix with 0 in all values. (No edges).
+        Graph MarkedGraph = new Graph(amEmpty); //Make a duplicate but with NO edges at all.
         for( Sequence sq : in_lsInputSequences )
         {
             //Call the Graph class's function to get the induced subgraph for the given sequence.
+            Graph Subgraph = in_DependencyGraph.getInducedSubgraph(sq);
+            //Now, compute the transitive reduction of this subgraph
+            TransitiveReduction(Subgraph);//NOTE: The reduced graph is the same as the Input graph.
+            
+            //Iterate its vertices to see which edges must be marked.
+            for( Vertex V : Subgraph.getNodes() )
+            {
+                for(Vertex AdjV : V.getDescendants().values())
+                {
+                    MarkedGraph.findByLabel(V.getLabel()).AddDescendant(AdjV);
+                }
+            }
             
         }
         
         /*7. Remove the unmarked edges in E' */
-        
+        //NOTE: This part has already been made in step (6), right after the transitive reduction.
+        //but it is done increasingly (only adding the marked vertices, instead of removing the unmarked ones).
        
         
         /*8. In the graph so obtained, merge the vertices that correspond to different instances of
         the same activity in the graph, thus reverting to the original set of vertices*/
+        
         
         /*9. Return the resulting graph.*/
     }
