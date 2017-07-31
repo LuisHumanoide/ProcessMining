@@ -6,6 +6,7 @@
 package processmining.matrix;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import processmining.Config;
 import processmining.Graph.Graph;
@@ -31,27 +32,76 @@ public class MapMatrix {
 
     /**
      * construct the initial matrix by the sequences
-     *
+     * 31/July/2017 AUGC: Added functionality to compute the "Following" relation, as described by the Powerpoint presentation.
      * @param sequences
      */
     public void makeMatrix(LinkedList<Sequence> sequences) {
+        
+        //This hash maps help to know which transitions happen before and after each transition.
+        HashMap< String, HashSet<String> > HappenedBefore = new HashMap<>();
+        HashMap< String, HashSet<String> > HappenedAfter = new HashMap<>();
         /*
         initialize the matrix putting 0 in all cells
          */
         for (int i = 0; i < LabelNames.labelNamesList().size(); i++) {
             TokenNames tn = new TokenNames();
             Rows.put(LabelNames.labelNamesList().get(i), tn);
+            HappenedBefore.put(LabelNames.labelNamesList().get(i), new HashSet<>());
+            HappenedAfter.put(LabelNames.labelNamesList().get(i), new HashSet<>());
         }
+
         /*
         make the matrix by the sequence
          */
         for (Sequence sq : sequences) {
-            for (int i = 0; i < sq.sequence.size() - 1; i++) {
+            for (int i = 0; i < sq.sequence.size(); i++) {
+                for( int j = i +1 ; j < sq.sequence.size() ; j++ )
+                {
+                    HappenedAfter.get(sq.sequence.get(i)).add(sq.sequence.get(j));
+                }
+                for( int k = i -1 ; k >= 0; k-- )
+                {
+                    HappenedBefore.get(sq.sequence.get(i)).add(sq.sequence.get(k));
+                }
+                /*This is how parra did it.*/
+                //COMMENTED FOR DEBUGGING ONLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 31 JULY 2017
                 TokenNames tn = Rows.get(sq.sequence.get(i));
-                tn.addOccurrence(sq.sequence.get(i + 1));//This is where you fill the matrix INCLUDING the V' vertices.
+                if(i+1 < sq.sequence.size())
+                {
+                    tn.addOccurrence(sq.sequence.get(i + 1));//This is where you fill the matrix INCLUDING the V' vertices.
+                }
             }
         }
 
+        //In here, remove the ones that appear independent of each other.
+        //Also print the values for debugging purposes.
+        for (int i = 0; i < LabelNames.labelNamesList().size(); i++) 
+        {
+            String ActualLabel = LabelNames.labelNamesList().get(i);
+            HashSet<String> hsTemp = new HashSet<>();
+            hsTemp.addAll( HappenedAfter.get(ActualLabel) );
+            HappenedAfter.get(ActualLabel).removeAll( HappenedBefore.get(ActualLabel) );
+            HappenedBefore.get(ActualLabel).removeAll( hsTemp);
+            
+            
+            //DEBUG: Print the ones that happened before.
+            System.out.println (" The transitions that happen Before : " + ActualLabel + " are: ");
+            for( String szName :  HappenedBefore.get(ActualLabel) )
+            {
+                System.out.print(szName  +" ");
+            }
+            System.out.println ("");
+            
+            //NOTE: The ones of the "happened before" relation are not trimmed of the ones that are also in the "Happened after"
+            //NOTE: This has been corrected, please check so the Before-relation is also trimmed.
+            System.out.println (" The transitions that happen After : " + ActualLabel + "  are: ");
+            for( String szName :  HappenedAfter.get(ActualLabel) )
+            {
+                System.out.print(szName  +" ");
+            }
+            System.out.println ("");
+        }
+        
     }
     /**
      * create a mapMatrix by a graph 
