@@ -30,6 +30,30 @@ public class MapMatrix {
         Rows = new HashMap<>();
     }
 
+    public void makeMatrixSimple( LinkedList<Sequence> sequences )
+    {
+        /*
+        initialize the matrix putting 0 in all cells
+         */
+        for (int i = 0; i < LabelNames.labelNamesList().size(); i++) {
+            TokenNames tn = new TokenNames();
+            Rows.put(LabelNames.labelNamesList().get(i), tn);
+        }
+        
+        for (Sequence sq : sequences) {
+            for (int i = 0; i < sq.sequence.size(); i++) {
+                /*This is how parra did it.*/
+                TokenNames tn = Rows.get(sq.sequence.get(i));
+                if(i+1 < sq.sequence.size())
+                {
+                    tn.addOccurrence(sq.sequence.get(i + 1));//This is where you fill the matrix INCLUDING the V' vertices.
+                }
+            }
+        }
+
+        
+    }
+    
     /**
      * construct the initial matrix by the sequences
      * 31/July/2017 AUGC: Added functionality to compute the "Following" relation, as described by the Powerpoint presentation.

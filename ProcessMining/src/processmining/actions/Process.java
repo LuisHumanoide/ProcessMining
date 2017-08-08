@@ -27,6 +27,10 @@ import java.util.Stack;
  * @author Humanoide
  */
 public class Process {
+    
+    //The graph where the result of algorithm 3 is stored.
+    public static Graph m_FinalGraph;
+    
     /**
      * extract the sequences by the file
      * @param logFile
@@ -63,18 +67,28 @@ public class Process {
         //print the sequences
         if (Config.canPrint) System.out.println(LabelNames.labelNamesList());
         MapMatrix m=new MapMatrix();
-        m.makeMatrix(sq);
+        m.makeMatrixSimple(sq);
         m.printMatrix();
         ArrayMatrix am=new ArrayMatrix(m.Rows);
         Graph graph1=new Graph(am);
-        graph1.makeGraphviz("grafo1");
+        //graph1.makeGraphviz("grafo1");//This is the part Parra did.
+        
+        //DO ALGORITHM 3:
+        GraphAnalysis(graph1, sq);
+        m.makeMatrix(m_FinalGraph);
+        m.printMatrix();
+        
+        m_FinalGraph.makeGraphviz("grafoResultante"); //Make the resulting graph in graphViz
+        
+        
+        
     }
 
     /**
      * Function for TESTING ONLY, it reproduces the example given in slides 21 to 23 in the Power point presentation-
      * it is correctly right now 27 July 2017
      * The result is returned in the same Graph "in_Graph"
-     * @param in_Graph the graph to reduce.
+     * @param in_out_Graph the graph to reduce.
      */
     public static void TransitiveReduction(Graph in_out_Graph)
     {
@@ -92,7 +106,7 @@ public class Process {
                 c) Add the remanining successors of v to its descendants.
         */
         ArrayList<Vertex> lsInverseTopologicalOrder;
-        lsInverseTopologicalOrder = new ArrayList<Vertex>( in_out_Graph.getNodes() );
+        lsInverseTopologicalOrder = new ArrayList<>( in_out_Graph.getNodes() );
         lsInverseTopologicalOrder.sort(Comparator.comparing(Vertex::getLabel).reversed()); //This gives us the array of vertices in the inverted order.
         
         //This has to be done in a separate cycle, otherwise, the successors weren't set correctly.
@@ -106,10 +120,9 @@ public class Process {
             V.setDescendants(new HashMap<>()); // so it is now empty, according to the algorithm.
         }
         
-        HashSet<Vertex> hsGraphVertices = new HashSet<Vertex>();
+        HashSet<Vertex> hsGraphVertices = new HashSet<>();
         for( Vertex V : lsInverseTopologicalOrder )
         {
-            
             //a)
             for( Vertex SuccV : V.getSuccessors().values() )
             {
@@ -134,12 +147,14 @@ public class Process {
             {
                 System.out.print(DesVLabel + ", ");
             }
+            System.out.println(" ");
             //The same, but with the successors:
             System.out.println("Node " + V.getLabel() + " Successors are: ");
             for(String SuccVLabel : V.getSuccessors().keySet())
             {
                 System.out.print(SuccVLabel + ", ");
             }
+            System.out.println(" ");
             System.out.println("END.");
             
             //NOTE: IMPORTANT PLEASE READ:
@@ -324,7 +339,7 @@ public class Process {
         {
             System.out.print( V.getLabel() + ", " );
         }
-        
+        System.out.println(" "); //make a printing space.
         //To this point, the process seems to be ok.
         //Now: 2) Reverse directions of all arcs to obtain the transpose graph.
         ArrayMatrix tempMatrix = new ArrayMatrix( in_pGraph);
@@ -350,7 +365,7 @@ public class Process {
             sTransposedStack.push( pTransposedGraph.findByLabel(V.getLabel()) ); // get the ones with the same label, but that have inverted edges.
             System.out.print(sTransposedStack.peek().getLabel() + " ");
         }
-        
+        System.out.println(" ");
         
         
         //Now, part 3)
@@ -369,7 +384,8 @@ public class Process {
             Vertex VActual = V;
             while(true)
             {
-                pNewSCC.add(VActual); //Add the actual node to this SCC. //Be careful to avoid vertex duplication, therefore the HashSet
+                //NOTE: We add the one FROM THE ORIGINAL GRAPH, not the transposed one.
+                pNewSCC.add( in_pGraph.findByLabel( VActual.getLabel())); //Add the actual node to this SCC. //Be careful to avoid vertex duplication, therefore the HashSet
                 //First, check all its adjacent vertices, and apply DFS recursively on them.
                 int iCounter = 0;
                 for(Vertex AdjV : VActual.getDescendants().values())
@@ -446,15 +462,19 @@ public class Process {
         {
             for(Vertex V : hs)
             {
+                HashSet<String> toRemove = new HashSet<>();
                 for(Vertex V2 : V.getDescendants().values())
                 {
                     if(hs.contains(V2))
                     {
-                        V.getDescendants().remove(V2.getLabel()); // remove it from its descendants.
+                        toRemove.add(V2.getLabel());
                     }
                 }
+                V.getDescendants().keySet().removeAll(toRemove);
             }
         }
+        
+        /**WARNING: VERIFY THAT THE DESCENDANTS ARE ERASED IN THE DEPENDENCY GRAPH! */
         
         /*6. For each process execution present in the log: 
         
@@ -489,9 +509,11 @@ public class Process {
         
         /*8. In the graph so obtained, merge the vertices that correspond to different instances of
         the same activity in the graph, thus reverting to the original set of vertices*/
+        /*THIS IS WHERE THE PART THE DOCTOR WANTS WILL BE!*/
         
         
         /*9. Return the resulting graph.*/
+        m_FinalGraph = MarkedGraph; //The result is stored in this class's m_FinalGraph.
     }
     
     

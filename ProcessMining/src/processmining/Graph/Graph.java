@@ -5,6 +5,7 @@
  */
 package processmining.Graph;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import processmining.gui.FileUtils;
 import processmining.gui.GraphFrame;
@@ -159,29 +160,27 @@ public class Graph {
     public Graph getInducedSubgraph (Sequence in_Sequence)
     {
         //WARNING: THE NODES OF THE SUBGRAPH MUST BE DIFFERENT INSTANCES THAN THE ONES IN THE ORIGINAL GRAPH, OTHERWISE, WEIRD THINGS MAY HAPPEN.
-        HashSet<Vertex> pNodes = new HashSet<>(); //HashSet to store the nodes which DO belong to this sequence.
-        for (Vertex V :  nodes)
+        HashMap<String, Vertex> pNodes = new HashMap<>(); //HashSet to store the nodes which DO belong to this sequence.
+        for( String Names : in_Sequence.nodeNames)
         {
-            if(in_Sequence.findLabel(V.getLabel()) != null)
-            {
-                pNodes.add(V);
-            }
+            pNodes.put(Names, new Vertex(Names));
         }
-        //Once we have the ones that are on the sequence, we remove the edges to the nodes that are not in it.
-        for( Vertex V : pNodes  )
+        for (Vertex V :  pNodes.values())
         {
-            for(Vertex V2 : V.getDescendants().values())
+            Vertex V2 = findByLabel(V.getLabel()); //This is the node in the ORIGINAL GRAPH, not the induced one.
+            for( String V_Des : V2.getDescendants().keySet() ) //Iterate through its descendants, to make the connections in the Induced one.
             {
-                if( pNodes.contains(V2) == false)
+                if(pNodes.containsKey(V_Des)) //If this Node name is in the Sequence
                 {
-                    //Then, this edge is not valid anymore.
-                    V.getDescendants().remove(V2.getLabel());
+                    V.AddDescendant(pNodes.get(V_Des)); //Then, we DO add this edge to the induced subgraph
                 }
             }
-        }
-        
+        }    
         //Finally, assign the nodes to the Graph instance to be return.
-         Graph pInduced = new Graph(pNodes);
+        HashSet<Vertex> pFinalVertices = new HashSet<>();
+        pFinalVertices.addAll(pNodes.values());
+        //create a graph with vertices named after the Nodes in the sequences.
+        Graph pInduced = new Graph(  pFinalVertices);
         
         return pInduced;
         
