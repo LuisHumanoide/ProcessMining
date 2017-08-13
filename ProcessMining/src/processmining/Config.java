@@ -5,10 +5,19 @@
  */
 package processmining;
 
+import static processmining.Config.splitCharacter.SINGLE;
+
+
+
 /**
  *
  * @author Humanoide
  */
 public class Config {
-    public static boolean canPrint=true;
+
+    public enum splitCharacter {
+        SINGLE, SPACE;
+    }
+    public static boolean canPrint = true;
+    public static  splitCharacter splitCharacterSelected = SINGLE;
 }
