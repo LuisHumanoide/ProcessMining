@@ -8,6 +8,7 @@ package processmining.gui;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import processmining.Config;
+import processmining.Graph.Relations;
 import processmining.actions.Process;
 import processmining.matrix.LabelNames;
 
@@ -148,6 +149,8 @@ public class Gui extends javax.swing.JFrame {
         if (returnVal == JFileChooser.APPROVE_OPTION) {        
             content=FileUtils.readFile(chooser.getSelectedFile());
         }
+        Relations relat=new Relations();
+        relat.SequenceParOrdenado(chooser.getSelectedFile());
         /*get the sequences*/
         Process.doProcess(content);
         fileName.setText(chooser.getSelectedFile().getName());
