@@ -167,5 +167,20 @@ public class toolsRelations {
         }
         return flat = true;
     }
+    public boolean compararTc(char a, char b, char c, ArrayList<char[]> pares) { 
+        boolean flat = false;
+        char temp1, temp2, temp3;
+        for (int i = 0; i < pares.size(); i++) {
+            for (char[] as : pares) {
+                temp1 = as[0];
+                temp2 = as[1];
+                temp3 = as[2]; 
+                if (temp1 == a && temp2 == b && temp3 == c) {
+                    return flat; //elemento contenido
+                }
+            }
+        }
+        return flat = true;
+    }
 
 }
