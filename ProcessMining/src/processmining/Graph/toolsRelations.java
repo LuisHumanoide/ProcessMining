@@ -20,7 +20,7 @@ import processmining.matrix.LabelNames;
  */
 public class toolsRelations {
 
-    public static HashMap<String, ArrayList<Character>> coca(char data[]) {
+    public static HashMap<String, ArrayList<Character>> repetitiveDependent(char data[]) {
 
         /**
          * CREA EL ARREGLO DE LISTAS POR LETRITA
@@ -175,7 +175,7 @@ public class toolsRelations {
                 temp1 = as[0];
                 temp2 = as[1];
                 temp3 = as[2]; 
-                if (temp1 == a && temp2 == b && temp3 == c) {
+                if (temp1 == a && temp2 == b && temp3 == c && a==c) {
                     return flat; //elemento contenido
                 }
             }
