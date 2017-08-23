@@ -27,11 +27,13 @@ public class Relations {
     HashMap<Character,String> task;
     TreeMap<String,ArrayList<String>> rd;
     toolsRelations obj=new toolsRelations();
+    ArrayList<char[]> tc;
     
     public Relations(){
         seqPar=new ArrayList<>();
         task=new HashMap<>();
         rd=new TreeMap<>();
+        tc=new ArrayList<>();
     }
      public void SequenceParOrdenado(File list){ // funciona al 100%
         String contenido;
@@ -55,34 +57,25 @@ public class Relations {
         }
         
         System.out.println("- - - - - - - - - - - - - -");
-        
+        System.out.println(" Secuencia de pares ");
+        System.out.print(" Seq = {");
         Iterator i = seqPar.iterator();
         while(i.hasNext()){
             char []par = (char[])i.next();
-            System.out.println(par[0]+","+par[1]);
+            System.out.print("("+par[0]+","+par[1]+")");
         }
+         System.out.println("}");
         System.out.println("- - - - - - - - - - - - - -");
+         System.out.print("Lista de tareas: {");
         for (Character character : task.keySet()) 
-            System.out.println("Key: "+character);
-        
+            System.out.print(character+", ");
+        System.out.println("}");
         concurrenteR();
-        printRd(contenido);
-     
+        obj.coca(contenido.trim().toCharArray());
+        twoCycle(contenido.trim());
  }
-     public void printRd(String contenido)
-     {
-         HashMap<String,ArrayList<Character>> listas= obj.getListas(contenido);
-        for (String tindex : listas.keySet()) {      
-            ArrayList<Character> lista = listas.get(tindex);
-            System.out.print("["+tindex+"]: ");
-            for (Character character : lista) {
-                System.out.print(character);
-            }
-            System.out.println("");
-        }
-        System.out.println("- - - - - - - - - - - - - -");
-}        
-                   
+
+                  
     public void concurrenteR()
     {
         ArrayList<char[]> conR=new ArrayList<>();
@@ -95,26 +88,46 @@ public class Relations {
                 tn1=anidado[0];
                 tn2=anidado[1];
                 if(t1==tn2 && t2==tn1){
-                    System.out.println("Es su inverso...."+ t1+" "+t2+" inverso "+tn1+" "+tn2);
+                    //System.out.println("Es su inverso...."+ t1+" "+t2+" inverso "+tn1+" "+tn2);
                     conR.add(anidado);
                     flat=true;
                 }
             } 
         }
         System.out.println("- - - - - - - - - - - - - -"); 
+        System.out.println(" Relaciones concurrentes "); 
         Iterator it = conR.iterator();
         if(flat==true){
+            System.out.print("ConcR = { ");
             while(it.hasNext()){
                 char []parCo = (char[])it.next();
-                System.out.println(parCo[0]+","+parCo[1]);
+                System.out.print("("+parCo[0]+","+parCo[1]+")");
             }
+            System.out.println("}");
         }
         else
             System.out.println("La secuencia no contiene relaciones concurrentes ");
         System.out.println("- - - - - - - - - - - - - -");   
     }
-
+    
+    public void twoCycle(String contenido){
+        char uno, dos,tres;
+  
+        //System.out.println("Contenido:   "+contenido);
+        for(int i=0; i<contenido.length()-2;i++){
+            uno=contenido.charAt(i);
+            dos=contenido.charAt(i+1);
+            tres=contenido.charAt(i+2);
+            if(uno==tres)
+                tc.add(new char[]{uno,dos,tres});
+        }
+        Iterator i = tc.iterator();
+        while(i.hasNext()){
+            char []tercia = (char[])i.next();
+            System.out.println(tercia[0]+","+tercia[1]+","+tercia[2]);
+        }
+        if(!i.hasNext())
+            System.out.println("- - La secuencia no contiene two length cycle - - ");
+    }
  
 }
-
-
