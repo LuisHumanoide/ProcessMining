@@ -161,7 +161,7 @@ public class Graph {
     {
         //WARNING: THE NODES OF THE SUBGRAPH MUST BE DIFFERENT INSTANCES THAN THE ONES IN THE ORIGINAL GRAPH, OTHERWISE, WEIRD THINGS MAY HAPPEN.
         HashMap<String, Vertex> pNodes = new HashMap<>(); //HashSet to store the nodes which DO belong to this sequence.
-        for( String Names : in_Sequence.nodeNames)
+        for( String Names : in_Sequence.sequence)
         {
             pNodes.put(Names, new Vertex(Names));
         }
