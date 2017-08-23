@@ -114,7 +114,7 @@ public class Process {
         //The selected topological order will be alphabetically. this
 
         //2. for each v, let the succesors of v be succ(v) = {u|(v, u) belong to E}.
-        System.out.println("Checking that the Successors are correctly initialized");
+        //System.out.println("Checking that the Successors are correctly initialized");
 
         /* 3.
             for each vertex v, in reverse topological order:
@@ -153,9 +153,9 @@ public class Process {
         }
 
         //Now, just print it in the console to see the state of the operation
-        System.out.println("The graph structure, after the transitive reduction, is now: ");
+        //System.out.println("The graph structure, after the transitive reduction, is now: ");
         for (Vertex V : hsGraphVertices) {
-            System.out.println("Node " + V.getLabel() + " descendants are: ");
+            /*System.out.println("Node " + V.getLabel() + " descendants are: ");
             for (String DesVLabel : V.getDescendants().keySet()) {
                 System.out.print(DesVLabel + ", ");
             }
@@ -166,7 +166,7 @@ public class Process {
                 System.out.print(SuccVLabel + ", ");
             }
             System.out.println(" ");
-            System.out.println("END.");
+            System.out.println("END.");*/
 
             //NOTE: IMPORTANT PLEASE READ:
             //The ones noted as "Successors" in the algorithm, are the ones
@@ -427,6 +427,9 @@ public class Process {
     public static void GraphAnalysis(Graph in_DependencyGraph, LinkedList<Sequence> in_lsInputSequences) {
         /*1. Start with the graph G = (V, E), with V being the set of activities of the process and E = 0.*/
 
+         MapMatrix mDependecy1 = new MapMatrix();
+            mDependecy1.makeMatrix(in_DependencyGraph); //FOR DEBBUGING ONLY.
+        
  /*2. Go through each execution in the log and uniquely identify each activity recorded in the log, 
         thus create a new set of vertices V' and graph G = (V' , E). */
  /*3. For each process execution in L, and for each pair of activities u, v such that u terminates
@@ -452,6 +455,10 @@ public class Process {
             }
         }
 
+        
+        MapMatrix mDependecy = new MapMatrix();
+            mDependecy.makeMatrix(in_DependencyGraph); //FOR DEBBUGING ONLY.
+        
         /**
          * WARNING: VERIFY THAT THE DESCENDANTS ARE ERASED IN THE DEPENDENCY
          * GRAPH!
@@ -467,6 +474,11 @@ public class Process {
         for (Sequence sq : in_lsInputSequences) {
             //Call the Graph class's function to get the induced subgraph for the given sequence.
             Graph Subgraph = in_DependencyGraph.getInducedSubgraph(sq);
+            
+            System.out.println("The subgraph for Sequence: " + sq.sequence.toString() + " is: ");
+            MapMatrix m = new MapMatrix();
+            m.makeMatrix(Subgraph);
+            m.printMatrix();
             //Now, compute the transitive reduction of this subgraph
             TransitiveReduction(Subgraph);//NOTE: The reduced graph is the same as the Input graph.
 
