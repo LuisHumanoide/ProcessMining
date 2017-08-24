@@ -34,6 +34,7 @@ public class Relations {
     HashMap<Character, ArrayList<Character>> letritaYsusamigos;
     ArrayList<char[]> conR;
     ArrayList<char[]> cauR;
+    ArrayList<char[]> seqPrima;
 
     public Relations() {
         seqPar = new ArrayList<>();
@@ -43,6 +44,7 @@ public class Relations {
         letritaYsusamigos = new HashMap<>();
         conR = new ArrayList<>();
         cauR = new ArrayList<>();
+        seqPrima = new ArrayList<>();
     }
 
     public void SequenceParOrdenado(File list) { // funciona al 100%
@@ -66,16 +68,14 @@ public class Relations {
                 } else if (obj.comparar(uno, dos, seqPar) == true) {
                     seqPar.add(new char[]{uno, dos});
                 }
-            }
-            else if (uno == '\n' && dos != '\n') {
+            } else if (uno == '\n' && dos != '\n') {
                 uno = contenido.charAt(i + 1);
                 dos = contenido.charAt(i + 2);
                 if (obj.comparar(uno, dos, seqPar) == true) {
                     seqPar.add(new char[]{uno, dos});
                 }
                 i++;
-            }
-            else if(uno != '\n' && dos == '\n'){
+            } else if (uno != '\n' && dos == '\n') {
                 dos = contenido.charAt(i + 2);
                 if (obj.comparar(uno, dos, seqPar) == true) {
                     seqPar.add(new char[]{uno, dos});
@@ -105,6 +105,7 @@ public class Relations {
         twoCycle(contenido.trim());
         concurrenteR(contenido.trim());
         causarR();
+        sequencePrima();
     }
 
     public void concurrenteR(String contenido) {
@@ -248,10 +249,11 @@ public class Relations {
         HashMap<Character, Character> tasks = new HashMap<>();
 
         for (int i = 0; i < data.length; i++) {
-            if(data[i]!='\n')
+            if (data[i] != '\n') {
                 tasks.put(data[i], data[i]);
+            }
         }
-        
+
         //System.out.println("TASKS");
         boolean flag = false;
         int index = 0;
@@ -269,33 +271,31 @@ public class Relations {
 
             //System.out.println("CAMBIO DE T");
             for (int i = 0; i < data.length; i++) {
-              if(data[i]!='\n'){
-                if (data[i] == t && !flag) {
+                if (data[i] != '\n') {
+                    if (data[i] == t && !flag) {
 
-                    if (i == data.length - 1) {
-                        continue;
+                        if (i == data.length - 1) {
+                            continue;
+                        }
+
+                        //   System.out.println(" inicia lista de ["+t+""+index+"]");
+                        flag = true;
+                        currentList = new ArrayList();
+                        currentList.add(data[i]);
+
+                        //  listas.put(t + "" + index, currentList);
+                    } else if (data[i] == t && flag) {
+                        flag = false;
+                        listasPorLetrita.add(currentList);
+                        index++;
+                        i--;
+
+                        // System.out.println(" fin lista ");
+                    } else if (flag) {
+                        currentList.add(data[i]);
+                        //System.out.println(t + " --> " + data[i]);
                     }
-
-                 //   System.out.println(" inicia lista de ["+t+""+index+"]");
-                    flag = true;
-                    currentList = new ArrayList();
-                    currentList.add(data[i]);
-                    
-                    
-
-                  //  listas.put(t + "" + index, currentList);
-                } else if (data[i] == t && flag) {
-                    flag = false;
-                    listasPorLetrita.add(currentList);
-                    index++;
-                    i--;
-
-                   // System.out.println(" fin lista ");
-                } else if (flag) {
-                    currentList.add(data[i]);
-                    //System.out.println(t + " --> " + data[i]);
                 }
-            }
             }
         }
 
@@ -369,4 +369,58 @@ public class Relations {
         return listas;
     }
 
+    public void sequencePrima() {
+        ArrayList<char[]> temporal = new ArrayList(seqPar);
+        ArrayList<char[]> temCausalR = new ArrayList(cauR);
+        ArrayList<char[]> temConR= new ArrayList(conR);
+        char spar1, spar2, caupar1, caupar2, conpar1, conpar2;
+        Iterator iseq = temporal.iterator();
+        while (iseq.hasNext()) {
+            char[] par = (char[]) iseq.next();
+            spar1 = par[0];
+            spar2 = par[1];
+            boolean banderaCausalR=false, banderaConR=false;
+        
+            Iterator icausa = temCausalR.iterator();
+            while (icausa.hasNext()) {
+                char[] parca = (char[]) icausa.next();
+                caupar1 = parca[0];
+                caupar2 = parca[1];
+                if (spar1== caupar1&& spar2==caupar2) {
+                    banderaCausalR=true;
+                }
+            }
+            Iterator iconcu = temConR.iterator();
+            while (iconcu.hasNext()) {
+                char[] parcon = (char[]) iconcu.next();
+                conpar1 = parcon[0];
+                conpar2 = parcon[1];
+                if (spar1== conpar1&& spar2==conpar2) {
+                    banderaConR=true;
+                }
+            }
+            if(banderaCausalR==false && banderaConR==false)
+            {
+                seqPrima.add(par);
+            }
+                
+        }
+         if (!seqPrima.isEmpty()) {
+            System.out.println("Sequencia prima ");
+            Iterator it = seqPrima.iterator();
+            System.out.print("Seq' = { ");
+            while (it.hasNext()) {
+                char[] parCo = (char[]) it.next();
+                System.out.print("(" + parCo[0] + "," + parCo[1] + ")");
+            }
+            System.out.println("}");
+        } else {
+            System.out.println("La secuencia no contiene seq' ");
+        }
+
+        System.out.println(
+                "- - - - - - - - - - - - - -");
+        
+            
+    }
 }
