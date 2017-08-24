@@ -48,6 +48,7 @@ public class Relations {
     public void SequenceParOrdenado(File list) { // funciona al 100%
         String contenido;
         contenido = FileUtils.readFile(list);
+        System.out.println("secuencia==============   " + contenido);
         char uno;
         char dos;
         String t1 = "";
@@ -56,12 +57,23 @@ public class Relations {
         for (int i = 0; i < contenido.length() - 2; i++) {
             uno = contenido.charAt(i);
             dos = contenido.charAt(i + 1);
-            task.put(uno, "");
-            task.put(dos, "");
-            if (seqPar.isEmpty()) {
-                seqPar.add(new char[]{uno, dos});
-            } else if (obj.comparar(uno, dos, seqPar) == true) {
-                seqPar.add(new char[]{uno, dos});
+
+            if (uno != '\n' && dos != '\n') {
+                task.put(uno, "");
+                task.put(dos, "");
+                if (seqPar.isEmpty()) {
+                    seqPar.add(new char[]{uno, dos});
+                } else if (obj.comparar(uno, dos, seqPar) == true) {
+                    seqPar.add(new char[]{uno, dos});
+                }
+            }
+            if (uno == '\n' && dos != '\n') {
+                uno = contenido.charAt(i + 1);
+                dos = contenido.charAt(i + 2);
+                if (obj.comparar(uno, dos, seqPar) == true) {
+                    seqPar.add(new char[]{uno, dos});
+                }
+                i++;
             }
         }
 
@@ -81,14 +93,14 @@ public class Relations {
         }
         System.out.println("}");
         System.out.println("- - - - - - - - - - - - - -");
-        
+
         repetitiveDependent(contenido.trim().toCharArray());
         twoCycle(contenido.trim());
-        concurrenteR();
+        concurrenteR(contenido.trim());
         causarR();
     }
 
-    public void concurrenteR() {
+    public void concurrenteR(String contenido) {
         char t1, t2, tn1, tn2;
         boolean flat = false;
         for (char[] par : seqPar) {
@@ -98,8 +110,10 @@ public class Relations {
                 tn1 = anidado[0];
                 tn2 = anidado[1];
                 if (t1 == tn2 && t2 == tn1) {
-                    conR.add(anidado);
-                    flat = true;
+                    if (obj.compararTc(t1, t2, t1, tc) == true) {
+                        conR.add(anidado);
+                        flat = true;
+                    }
                 }
             }
         }
@@ -143,14 +157,14 @@ public class Relations {
         } else {
             System.out.println(" la secuencia no contiene TC ");
         }
-       
+
     }
 
     public void causarR() {
         ArrayList<char[]> temporal = new ArrayList(seqPar);
         char par1, par2;
         boolean flagConcurrente = false;
-       
+
         Iterator i = temporal.iterator();
         while (i.hasNext()) {
             flagConcurrente = false;
@@ -171,19 +185,21 @@ public class Relations {
                     if (key.equals(par1)) {
                         for (Character character : letritaYsusamigos.get(key)) {
                             if (character.equals(par2)) {
-                                if(cauR.isEmpty())
+                                if (cauR.isEmpty()) {
                                     cauR.add(par);
-                                else if (obj.comparar(par1, par2, cauR) == true) 
+                                } else if (obj.comparar(par1, par2, cauR) == true) {
                                     cauR.add(par);
+                                }
                             }
                         }
                     } else if (key.equals(par2)) {
                         for (Character character : letritaYsusamigos.get(key)) {
                             if (character.equals(par1)) {
-                                if(cauR.isEmpty())
+                                if (cauR.isEmpty()) {
                                     cauR.add(par);
-                                else if (obj.comparar(par1, par2, cauR) == true) 
+                                } else if (obj.comparar(par1, par2, cauR) == true) {
                                     cauR.add(par);
+                                }
                             }
                         }
                     }
@@ -196,9 +212,9 @@ public class Relations {
                 }
             }
         }
-       
+
         if (!cauR.isEmpty()) {
-             System.out.println("Relacion causal");
+            System.out.println("Relacion causal");
             Iterator it = cauR.iterator();
             System.out.print("CausalR = { ");
             while (it.hasNext()) {
@@ -225,9 +241,10 @@ public class Relations {
         HashMap<Character, Character> tasks = new HashMap<>();
 
         for (int i = 0; i < data.length; i++) {
-            tasks.put(data[i], data[i]);
+            if(data[i]!='\n')
+                tasks.put(data[i], data[i]);
         }
-
+        
         //System.out.println("TASKS");
         boolean flag = false;
         int index = 0;
@@ -237,42 +254,42 @@ public class Relations {
         ArrayList<Character> currentList = null;
 
         for (Character t : tasks.keySet()) {
-
             listasPorLetrita = new ArrayList<ArrayList<Character>>();
             flag = false;
             index = 0;
 
             taskList.put(t, listasPorLetrita);
 
-            // System.out.println("CAMBIO DE T");
+            System.out.println("CAMBIO DE T");
             for (int i = 0; i < data.length; i++) {
+              if(data[i]!='\n'){
                 if (data[i] == t && !flag) {
 
                     if (i == data.length - 1) {
                         continue;
                     }
 
-                    //System.out.println(" inicia lista de ["+t+""+index+"]");
+                    System.out.println(" inicia lista de ["+t+""+index+"]");
                     flag = true;
                     currentList = new ArrayList();
                     currentList.add(data[i]);
+                    
+                    
 
-                    listasPorLetrita.add(currentList);
-
-                    //listas.put(t + "" + index, currentList);
+                    listas.put(t + "" + index, currentList);
                 } else if (data[i] == t && flag) {
                     flag = false;
-
+                    listasPorLetrita.add(currentList);
                     index++;
                     i--;
 
-                    //System.out.println(" fin lista ");
+                    System.out.println(" fin lista ");
                 } else if (flag) {
                     currentList.add(data[i]);
-                    //System.out.println(t + " --> " + data[i]);
+                    System.out.println(t + " --> " + data[i]);
                 }
             }
-
+            }
         }
 
         //HashMap<Character,ArrayList<Character>> letritaYsusamigos = new HashMap<>(); //<--- ESTE ES EL CHIDO
@@ -315,7 +332,6 @@ public class Relations {
         }
 
         //
-        
         System.out.println(" Repetitively dependet ");
 
         for (Character key : letritaYsusamigos.keySet()) {
