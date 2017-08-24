@@ -67,8 +67,15 @@ public class Relations {
                     seqPar.add(new char[]{uno, dos});
                 }
             }
-            if (uno == '\n' && dos != '\n') {
+            else if (uno == '\n' && dos != '\n') {
                 uno = contenido.charAt(i + 1);
+                dos = contenido.charAt(i + 2);
+                if (obj.comparar(uno, dos, seqPar) == true) {
+                    seqPar.add(new char[]{uno, dos});
+                }
+                i++;
+            }
+            else if(uno != '\n' && dos == '\n'){
                 dos = contenido.charAt(i + 2);
                 if (obj.comparar(uno, dos, seqPar) == true) {
                     seqPar.add(new char[]{uno, dos});
@@ -260,7 +267,7 @@ public class Relations {
 
             taskList.put(t, listasPorLetrita);
 
-            System.out.println("CAMBIO DE T");
+            //System.out.println("CAMBIO DE T");
             for (int i = 0; i < data.length; i++) {
               if(data[i]!='\n'){
                 if (data[i] == t && !flag) {
@@ -269,24 +276,24 @@ public class Relations {
                         continue;
                     }
 
-                    System.out.println(" inicia lista de ["+t+""+index+"]");
+                 //   System.out.println(" inicia lista de ["+t+""+index+"]");
                     flag = true;
                     currentList = new ArrayList();
                     currentList.add(data[i]);
                     
                     
 
-                    listas.put(t + "" + index, currentList);
+                  //  listas.put(t + "" + index, currentList);
                 } else if (data[i] == t && flag) {
                     flag = false;
                     listasPorLetrita.add(currentList);
                     index++;
                     i--;
 
-                    System.out.println(" fin lista ");
+                   // System.out.println(" fin lista ");
                 } else if (flag) {
                     currentList.add(data[i]);
-                    System.out.println(t + " --> " + data[i]);
+                    //System.out.println(t + " --> " + data[i]);
                 }
             }
             }
