@@ -5,12 +5,15 @@
  */
 package processmining.gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -30,55 +33,45 @@ public class GraphFrame extends javax.swing.JFrame {
     }
     BufferedImage bufImg;
     String imageName;
-    int cont=0;
+    int cont = 0;
     Timer t;
+
     public GraphFrame(String imageName) {
         this();
         this.imageName = imageName;
         this.setTitle(imageName);
-        JLabel label = new JLabel();
-        try {
-            bufImg = ImageIO.read(new File(imageName + ".png"));
-            bufImg.flush();
-            label.setIcon(new ImageIcon(bufImg));
-            label.setSize(bufImg.getWidth(), bufImg.getHeight());
-            this.setSize(bufImg.getWidth(), bufImg.getHeight());
-            label.repaint();
-            //works even without repaint
-        } catch (IOException ex) {
-            System.out.println("Unable to read image file");
-        }
-        
-        t=new javax.swing.Timer(200, new ActionListener() {
+        t = new javax.swing.Timer(200, new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 //do an icon change
                 try {
-                    bufImg = ImageIO.read(new File(imageName + ".png"));
-                    bufImg.flush();
-                    label.setIcon(new ImageIcon(bufImg));
-                    label.setSize(bufImg.getWidth(), bufImg.getHeight());
-                    resize();
-                    label.repaint();
-                    //works even without repaint
+                   bufImg = ImageIO.read(new File(imageName + ".png"));
+                   setSize(bufImg.getWidth()+50, bufImg.getHeight() + 50);
                 } catch (IOException ex) {
-                    System.out.println("Unable to read image file");
                 }
                 cont++;
-                if(cont<=2){
+                if (cont <= 2) {
                     t.stop();
+                }
+                if(cont>0){
+                    setVisible(true);
                 }
             }
         });
-        
+
         t.start();
-       // this.setSize(bufImg.getWidth(), bufImg.getHeight());
-        this.add(label);
-        this.setVisible(true);
+
+        
     }
-    
-    public void resize(){
-        this.setSize((int)(bufImg.getWidth()*1.1), (int)(bufImg.getHeight()*1.1));
+
+    public void resize() {
+        this.setSize((int) (bufImg.getWidth() * 1.1), (int) (bufImg.getHeight() * 1.1));
+    }
+
+    public void paint(Graphics g) {
+        g.setColor(Color.white);
+        g.fillRect(0, 0, bufImg.getWidth()*2, bufImg.getHeight()*2);
+        g.drawImage(bufImg, 5, 30, null);
     }
 
     /**
