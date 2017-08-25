@@ -48,11 +48,11 @@ public class FileUtils {
      * @param name
      * @param cont
      */
-    public static void write(String name, String cont) {
+    public static void write(String name, String cont, String ext) {
         FileWriter fichero = null;
         BufferedWriter pw = null;
         try {
-            fichero = new FileWriter(name + ".txt");
+            fichero = new FileWriter(name + "."+ext);
             pw = new BufferedWriter(fichero);
             pw.write(cont);
             pw.close();

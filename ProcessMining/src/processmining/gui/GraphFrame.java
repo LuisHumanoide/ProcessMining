@@ -10,14 +10,25 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.Timer;
+import javax.swing.border.BevelBorder;
+import javax.swing.event.PopupMenuListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -32,6 +43,7 @@ public class GraphFrame extends javax.swing.JFrame {
         initComponents();
     }
     BufferedImage bufImg;
+    JPopupMenu menu;
     String imageName;
     int cont = 0;
     Timer t;
@@ -39,29 +51,86 @@ public class GraphFrame extends javax.swing.JFrame {
     public GraphFrame(String imageName) {
         this();
         this.imageName = imageName;
-        this.setTitle(imageName);
+        menu = new JPopupMenu();
+        setTitle(imageName);
         t = new javax.swing.Timer(200, new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 //do an icon change
                 try {
-                   bufImg = ImageIO.read(new File(imageName + ".png"));
-                   setSize(bufImg.getWidth()+50, bufImg.getHeight() + 50);
-                } catch (IOException ex) {
+                    bufImg = ImageIO.read(new File(imageName + ".png"));
+                    setSize(bufImg.getWidth() + 50, bufImg.getHeight() + 50);
+                } catch (Exception ex) {
+                    cont=-2;
                 }
                 cont++;
-                if (cont <= 2) {
+                if (cont >= 2) {
                     t.stop();
                 }
-                if(cont>0){
+                if (cont > 0) {
                     setVisible(true);
                 }
             }
         });
-
-        t.start();
-
+        ActionListener menuListener = new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                String lastPath=".";
+                try{
+                    lastPath=FileUtils.readFile(new File("lastPath.du"));
+                }catch(Exception e){}
+                
+                JFileChooser fileChooser = new JFileChooser(""+lastPath.trim());
+                FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "PNG images", "png");
+                
+                fileChooser.setFileFilter(filter);
+                fileChooser.setSelectedFile(new File(imageName));
+                repaint();
+                
+                if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+                    File outputfile = new File(fileChooser.getSelectedFile()+".png");
+                    try {
+                        ImageIO.write(bufImg, "png", outputfile);
+                    } catch (IOException ex) {
+                        Logger.getLogger(GraphFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    lastPath=outputfile.getParent();
+                    FileUtils.write("lastPath", lastPath,"du");
+                    
+                }
+                repaint();
+            }
+        };
         
+        t.start();
+        JMenuItem item;
+        menu.add(item = new JMenuItem("Save Image"));
+        item.setHorizontalTextPosition(JMenuItem.RIGHT);
+        item.addActionListener(menuListener);
+        this.addMouseListener(new MousePopupListener());
+
+    }
+
+    class MousePopupListener extends MouseAdapter {
+
+        public void mousePressed(MouseEvent e) {
+            checkPopup(e);
+            repaint();
+        }
+
+        public void mouseClicked(MouseEvent e) {
+            checkPopup(e);
+        }
+
+        public void mouseReleased(MouseEvent e) {
+            checkPopup(e);
+        }
+
+        private void checkPopup(MouseEvent e) {
+            if (e.isPopupTrigger()) {
+                menu.show(GraphFrame.this, e.getX(), e.getY());
+            }
+        }
     }
 
     public void resize() {
@@ -70,7 +139,7 @@ public class GraphFrame extends javax.swing.JFrame {
 
     public void paint(Graphics g) {
         g.setColor(Color.white);
-        g.fillRect(0, 0, bufImg.getWidth()*2, bufImg.getHeight()*2);
+        g.fillRect(0, 0, bufImg.getWidth() * 2, bufImg.getHeight() * 2);
         g.drawImage(bufImg, 5, 30, null);
     }
 

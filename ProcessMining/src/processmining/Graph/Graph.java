@@ -116,7 +116,7 @@ public class Graph {
             }
         }
         content=content+"}";
-        FileUtils.write(name, content);
+        FileUtils.write(name, content,"txt");
         FileUtils.generateImg(name, "png");
         new GraphFrame(name);   
     }
@@ -129,7 +129,7 @@ public class Graph {
             }
         }
         content=content+"}";
-        FileUtils.write(name, content);
+        FileUtils.write(name, content,"txt");
         FileUtils.generateImg(name, "png");
         new GraphFrame(name);   
     }
